@@ -1,8 +1,16 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.0;
 
-contract Crowdsale {
+import "./Token.sol";
 
-    string public name = "Crowdsale";
+contract Crowdsale {
+    Token public token;
+
+
+    // Need Code 
+    // Need Address
+    constructor(Token _token) {
+        token = _token;
+    }
    
 }

@@ -7,16 +7,20 @@ const tokens = function (n){
 
 describe("Crowdsale", function() {
     let crowdsale
+    let token
 
     beforeEach(async function() {
         const Crowdsale = await await ethers.getContractFactory("Crowdsale");
-        crowdsale = await Crowdsale.deploy();
+        const Token = await ethers.getContractFactory('Token');
+        token = await Token.deploy('My Hardhat Token', 'MHT', '1000000');
+        crowdsale = await Crowdsale.deploy(token.address);
 
     })
 
     describe("Deployment", function() {
-        it("has correct name", async function() {
-            expect(await crowdsale.name()).to.equal("Crowdsale");
-        });
+
+        it('returns token address', async function() {
+            expect(await crowdsale.token()).equal(token.address)
+        })
     });
 });
