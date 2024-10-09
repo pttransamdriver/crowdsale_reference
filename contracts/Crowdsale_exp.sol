@@ -1,9 +1,10 @@
-// SPDX-License-Identifier: SEE LICENSE IN LICENSE
+//SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
 import "./Token.sol";
 
-contract Crowdsale {
+contract Crowdsale_exp {
     address owner;
     Token public token;
     uint256 public price;
@@ -13,7 +14,11 @@ contract Crowdsale {
     event Buy(uint256 amount, address buyer);
     event Finalize(uint256 tokensSold, uint256 ethRaised);
 
-    constructor(Token _token, uint256 _price, uint256 _maxTokens) {
+    constructor(
+        Token _token,
+        uint256 _price,
+        uint256 _maxTokens
+    ) {
         owner = msg.sender;
         token = _token;
         price = _price;
@@ -26,7 +31,7 @@ contract Crowdsale {
     }
 
     receive() external payable {
-        uint256 amount = msg.value /price;
+        uint256 amount = msg.value / price;
         buyTokens(amount * 1e18);
     }
 
@@ -44,6 +49,7 @@ contract Crowdsale {
         price = _price;
     }
 
+    // Finalize Sale
     function finalize() public onlyOwner {
         require(token.transfer(owner, token.balanceOf(address(this))));
 
@@ -53,5 +59,4 @@ contract Crowdsale {
 
         emit Finalize(tokensSold, value);
     }
-   
 }
