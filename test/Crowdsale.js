@@ -7,7 +7,7 @@ const tokens = function (n){
 
 const ether = tokens;
 
-describe("Crowdsale", function() {
+describe("Crowdsale Contract Test", function() {
     let crowdsale
     let token
     let deployer
@@ -45,6 +45,7 @@ describe("Crowdsale", function() {
             expect(await crowdsale.token()).to.equal(token.address)
         });
     });
+
     describe("Buying Tokens", function() {
         let transaction, result;
         let amount = tokens(10);
@@ -86,7 +87,7 @@ describe("Crowdsale", function() {
         let transaction, result;
         let amount = ether(10);
 
-        describe('success', function() {
+        describe('Success', function() {
 
             beforeEach(async function() {
                 transaction = await user1.sendTransaction({to: crowdsale.address, value: amount});
@@ -101,6 +102,66 @@ describe("Crowdsale", function() {
                 expect(await token.balanceOf(user1.address)).to.equal(amount)
             })
         })
+    })
+    describe('Changing the price', async function(){
+        let transaction, result
+        let price = ether(2);
+
+        describe('Success', function(){
+
+            beforeEach(async function(){
+                transaction = await crowdsale.connect(deployer).setPrice(ether(2));
+                result = await transaction.wait();
+            });
+
+            it('updates the price', async function(){
+                expect(await crowdsale.price()).to.equal(ether(2));
+            });
+
+        });
+
+        describe('Failure', async function(){
+
+        });
+    });
+
+    describe('Finalizing the sale', function() {
+        let transaction, result;
+        let amount = tokens(10);
+        let value = ether(10);
+
+        describe('success', function(){
+            beforeEach(async function(){
+                transaction = await crowdsale.connect(user1).buyTokens(amount, {value: value});
+                result = await transaction.wait();
+
+                transaction = await crowdsale.connect(deployer).finalize();
+                result = await transaction.wait();
+            })
+
+            it('transfers remaining to contract owner', async function(){
+                expect(await token.balanceOf(crowdsale.address)).to.equal(0)
+                expect(await token.balanceOf(deployer.address)).to.equal(tokens(999990));
+            })
+
+            it('transfers ETH balance to', async function(){
+                expect(await ethers.provider.getBalance(crowdsale.address)).to.equal(0)
+            })
+
+            it('emits Finalized event', async function() {
+                await expect(transaction).to.emit(crowdsale, "Finalize").withArgs(amount, value);
+            })
+
+
+        })
+
+        describe('Faiure', function(){
+
+            it('prevents non-owner from finalizing', async function() {
+                await expect(crowdsale.connect(user1).finalize()).to.be.reverted;
+            });
+        })
+
     })
 
 });
