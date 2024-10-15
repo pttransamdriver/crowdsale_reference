@@ -7,8 +7,8 @@
 const hre = require("hardhat");
 
 async function main() {
-  const NAME = 'My Hardhat Token'
-  const SYMBOL = 'MHT'
+  const NAME = 'Dapp University'
+  const SYMBOL = 'DAPP'
   const MAX_SUPPLY = '1000000'
   const PRICE = ethers.utils.parseUnits('0.025', 'ether')
 
