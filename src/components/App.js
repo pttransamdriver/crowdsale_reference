@@ -76,7 +76,7 @@ function App() {
     <Container>
       <Navigation />
 
-      <h1 className='text-center my-4'>Buy My Stuff!</h1>
+      <h1 className='text-center my-4'>Introducing the DApp Token!</h1>
 
       {isLoading ? (
         <Loading />
