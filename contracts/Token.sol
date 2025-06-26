@@ -1,3 +1,4 @@
+
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0; // Specifies the version of Solidity to use, ensuring compatibility and security.
 
