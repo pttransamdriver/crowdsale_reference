@@ -1,6 +1,5 @@
-
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0; // Specifies the version of Solidity to use, ensuring compatibility and security.
+pragma solidity ^0.8.28; // Specifies the version of Solidity to use, ensuring compatibility and security.
 
 // Importing the console module from Hardhat for debugging purposes.
 import "hardhat/console.sol";
